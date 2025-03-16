@@ -15,7 +15,7 @@ type Todo struct {
 	Body string `json:"body"`
 }
 
-func localFile(){
+func main(){
 	fmt.Println("Hello world")
 	app := fiber.New()
 
