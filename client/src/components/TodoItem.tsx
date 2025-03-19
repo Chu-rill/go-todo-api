@@ -1,9 +1,11 @@
-import { Badge, Box, Flex, Spinner, Text } from "@chakra-ui/react";
-import { FaCheckCircle } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
-import { Todo } from "./TodoList";
+// import { useState } from "react";
+import { Check, Loader2, Trash } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Todo } from "./TodoList";
 import { BASE_URL } from "../App";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 
 const TodoItem = ({ todo }: { todo: Todo }) => {
   const queryClient = useQueryClient();
@@ -52,48 +54,60 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
   });
 
   return (
-    <Flex gap={2} alignItems={"center"}>
-      <Flex
-        flex={1}
-        alignItems={"center"}
-        border={"1px"}
-        borderColor={"gray.600"}
-        p={2}
-        borderRadius={"lg"}
-        justifyContent={"space-between"}
-      >
-        <Text
-          color={todo.completed ? "green.200" : "yellow.100"}
-          textDecoration={todo.completed ? "line-through" : "none"}
-        >
-          {todo.body}
-        </Text>
-        {todo.completed && (
-          <Badge ml="1" colorScheme="green">
-            Done
-          </Badge>
-        )}
-        {!todo.completed && (
-          <Badge ml="1" colorScheme="yellow">
-            In Progress
-          </Badge>
-        )}
-      </Flex>
-      <Flex gap={2} alignItems={"center"}>
-        <Box
-          color={"green.500"}
-          cursor={"pointer"}
-          onClick={() => updateTodo()}
-        >
-          {!isUpdating && <FaCheckCircle size={20} />}
-          {isUpdating && <Spinner size={"sm"} />}
-        </Box>
-        <Box color={"red.500"} cursor={"pointer"} onClick={() => deleteTodo()}>
-          {!isDeleting && <MdDelete size={25} />}
-          {isDeleting && <Spinner size={"sm"} />}
-        </Box>
-      </Flex>
-    </Flex>
+    <Card className="mb-4">
+      <CardContent className="p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex-1">
+            <p className="text-lg font-medium">{todo.body}</p>
+            <div className="mt-1">
+              {todo.completed ? (
+                <Badge
+                  variant="default"
+                  className="bg-green-100 text-green-800"
+                >
+                  Done
+                </Badge>
+              ) : (
+                <Badge
+                  variant="secondary"
+                  className="bg-blue-100 text-blue-800"
+                >
+                  In Progress
+                </Badge>
+              )}
+            </div>
+          </div>
+          <div className="flex space-x-2">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => updateTodo()}
+              disabled={todo.completed || isUpdating}
+            >
+              {isUpdating ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Check className="h-4 w-4" />
+              )}
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              className="text-red-500 hover:text-red-700"
+              onClick={() => deleteTodo()}
+              disabled={isDeleting}
+            >
+              {isDeleting ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Trash className="h-4 w-4" />
+              )}
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
+
 export default TodoItem;

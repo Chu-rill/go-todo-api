@@ -1,8 +1,7 @@
-import { Flex, Spinner, Stack, Text } from "@chakra-ui/react";
-
-import TodoItem from "./TodoItem";
+import { Loader2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { BASE_URL } from "../App";
+import TodoItem from "./TodoItem";
 
 export type Todo = {
   _id: number;
@@ -30,36 +29,32 @@ const TodoList = () => {
 
   return (
     <>
-      <Text
-        fontSize={"4xl"}
-        textTransform={"uppercase"}
-        fontWeight={"bold"}
-        textAlign={"center"}
-        my={2}
-        bgGradient="linear(to-l, #0b85f8, #00ffff)"
-        bgClip="text"
-      >
+      <h1 className="text-4xl font-bold text-center my-2 uppercase bg-gradient-to-l from-blue-500 to-cyan-400 text-transparent bg-clip-text">
         Today's Tasks
-      </Text>
+      </h1>
+
       {isLoading && (
-        <Flex justifyContent={"center"} my={4}>
-          <Spinner size={"xl"} />
-        </Flex>
+        <div className="flex justify-center my-4">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
       )}
+
       {!isLoading && todos?.length === 0 && (
-        <Stack alignItems={"center"} gap="3">
-          <Text fontSize={"xl"} textAlign={"center"} color={"gray.500"}>
+        <div className="flex flex-col items-center gap-3">
+          <p className="text-xl text-center text-gray-500">
             All tasks completed! 🤞
-          </Text>
+          </p>
           <img src="/go.png" alt="Go logo" width={70} height={70} />
-        </Stack>
+        </div>
       )}
-      <Stack gap={3}>
+
+      <div className="flex flex-col gap-3">
         {todos?.map((todo) => (
           <TodoItem key={todo._id} todo={todo} />
         ))}
-      </Stack>
+      </div>
     </>
   );
 };
+
 export default TodoList;

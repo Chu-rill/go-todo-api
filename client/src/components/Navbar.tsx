@@ -1,47 +1,47 @@
-import { Box, Flex, Button, Text, Container } from "@chakra-ui/react";
-import { useColorMode } from "@chakra-ui/system";
-import { useColorModeValue } from "@chakra-ui/color-mode";
-import { IoMoon } from "react-icons/io5";
-import { LuSun } from "react-icons/lu";
+"use client";
+
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
 
 export default function Navbar() {
-  const { colorMode, toggleColorMode } = useColorMode();
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
-    <Container maxW={"900px"}>
-      <Box
-        bg={useColorModeValue("gray.400", "gray.700")}
-        px={4}
-        my={4}
-        borderRadius={"5"}
-      >
-        <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-          {/* LEFT SIDE */}
-          <Flex
-            justifyContent={"center"}
-            alignItems={"center"}
-            gap={3}
-            display={{ base: "none", sm: "flex" }}
-          >
-            <img src="/react.png" alt="logo" width={50} height={50} />
-            <Text fontSize={"40"}>+</Text>
-            <img src="/go.png" alt="logo" width={40} height={40} />
-            <Text fontSize={"40"}>=</Text>
-            <img src="/explode.png" alt="logo" width={50} height={50} />
-          </Flex>
+    <div className="container max-w-[900px] mx-auto">
+      <div className="my-4 px-4 h-16 rounded-md bg-slate-200 dark:bg-slate-800 flex items-center justify-between">
+        {/* LEFT SIDE */}
+        <div className="hidden sm:flex justify-center items-center gap-3">
+          <img src="/react.png" alt="logo" width={50} height={50} />
+          <span className="text-4xl">+</span>
+          <img src="/go.png" alt="logo" width={40} height={40} />
+          <span className="text-4xl">=</span>
+          <img src="/explode.png" alt="logo" width={50} height={50} />
+        </div>
 
-          {/* RIGHT SIDE */}
-          <Flex alignItems={"center"} gap={3}>
-            <Text fontSize={"lg"} fontWeight={500}>
-              Daily Tasks
-            </Text>
-            {/* Toggle Color Mode */}
-            <Button onClick={toggleColorMode}>
-              {colorMode === "light" ? <IoMoon /> : <LuSun size={20} />}
+        {/* RIGHT SIDE */}
+        <div className="flex items-center gap-3">
+          <span className="text-lg font-medium">Daily Tasks</span>
+          {/* Theme Toggle Button */}
+          {mounted && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            >
+              {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+              <span className="sr-only">Toggle theme</span>
             </Button>
-          </Flex>
-        </Flex>
-      </Box>
-    </Container>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }

@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Flex, Input, Spinner } from "@chakra-ui/react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { IoMdAdd } from "react-icons/io";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { BASE_URL } from "../App";
 
 const TodoForm = () => {
@@ -43,25 +44,31 @@ const TodoForm = () => {
   });
 
   return (
-    <form onSubmit={createTodo}>
-      <Flex gap={2}>
+    <form onSubmit={createTodo} className="w-full">
+      <div className="flex gap-2 items-center">
         <Input
           type="text"
           value={newTodo}
           onChange={(e) => setNewTodo(e.target.value)}
-          //   ref={(input) => input && input.focus()}
+          className="flex-1"
+          placeholder="Add a new task..."
         />
         <Button
-          mx={2}
           type="submit"
-          _active={{
-            transform: "scale(.97)",
-          }}
+          size="icon"
+          className="ml-2 transition active:scale-95"
+          disabled={isCreating}
         >
-          {isCreating ? <Spinner size={"xs"} /> : <IoMdAdd size={30} />}
+          {isCreating ? (
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+          ) : (
+            <Plus size={24} />
+          )}
+          <span className="sr-only">Add todo</span>
         </Button>
-      </Flex>
+      </div>
     </form>
   );
 };
+
 export default TodoForm;
